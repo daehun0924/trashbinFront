@@ -1,70 +1,128 @@
-# Getting Started with Create React App
+# 프로젝트: 스마트 쓰레기통 SW시스템
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 📌 프로젝트 개요
 
-## Available Scripts
+이 프로젝트는 사용자 인증부터 폐기물 등록·조회, 쓰레기통 상태 확인 및 관리자 수거 처리까지 전 과정을 웹으로 처리할 수 있는 스마트 폐기물 관리 플랫폼입니다.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🗓️개발 기간
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+2025.03.20 ~ 2025.04.01
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 🖥️ 플랫폼
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Web**
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 👥 개발 인원
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**1명 (개인 프로젝트)**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 🗨️ 개발 언어 및 서버
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Spring Security
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 💽 DB
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+MySQL
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 개발 범위
+<img src="images/bowling.png" width="600" alt="개발 범위 사진"/>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 프로젝트 동작 화면
+1. 회원 관리(S1-T01)
 
-### Code Splitting
+2. 폐기물 관리(S1-T02)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+3. 카테고리 관리(S1-T03)
 
-### Analyzing the Bundle Size
+4. 배출 관리(S1-T04)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+5. 통계 관리(S1-T05)
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## ⚠️개발 특이사항
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+1. **권한(Role) 구조 설계**
 
-### Deployment
+| 구분 | 역할 | 접근 가능한 URL |
+| --- | --- | --- |
+| `ROLE_USER` | 일반 사용자 | `/user/**`, `/waste/**`, `/info/**` 등 |
+| `ROLE_ADMIN` | 관리자 | `/admin/**`, `/dashboard/**`, `/manage/**` 등 |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+`Spring Security` 설정을 통해 `antMatchers()`로 URL 접근 제어
 
-### `npm run build` fails to minify
+사용자 로그인 시 `ROLE` 정보를 기반으로 적절한 페이지로 리디렉션 처리
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**❗구현 중 겪었던 문제와 해결 과정**
+
+**1. `403 Forbidden` 에러**
+
+🟥문제
+
+로그인 후에도 /user/**, /admin/** 접근 시 403 오류.
+
+🟦원인
+
+DB의 role 값이 USER 또는 ADMIN으로 되어 있었고, Spring Security는 자동으로
+
+ROLE_ prefix를 붙여 비교.
+
+🟩해결 방안
+
+```jsx
+authorities.add(new SimpleGrantedAuthority("ROLE_" + member.getRole()));
+```
+
+1. **로그인 후 리디렉션 무한 루프**
+
+🟥문제
+로그인 성공 후 `/login`으로 계속 리다이렉트
+
+🟦원인
+
+기본 리다이렉션 설정이 잘못되었거나 권한 없는 페이지로 리디렉트
+
+🟩해결 방안
+
+```jsx
+.successHandler((request, response, authentication) -> {
+  String role = authentication.getAuthorities().iterator().next().getAuthority();
+  if (role.equals("ROLE_ADMIN")) {
+      response.sendRedirect("/admin/home");
+  } else {
+      response.sendRedirect("/user/home");
+  }
+});
+```
+
+1. **관리자가 일반 유저 페이지 접근 시 템플릿 오류 발생**
+
+🟩해결 방안
+
+Security 설정에서 먼저 접근 차단 처리
+
+Thymeleaf 내부에서는 다음처럼 role에 따라 조건 렌더링
+
+```jsx
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+  관리자 메뉴
+</div>
+```
+
+✅ **성과 및 느낀 점**
+
+- Spring Security를 통해 역할 기반 권한 분리를 완성하고, 실제 에러를 디버깅하면서 보안 흐름에 대한 이해를 높였음
+- 에러 메시지를 기반으로 로그를 분석하고, Security 구조를 설계함으로써 **예외 처리 역량**과 **구조 설계 능력**이 향상될 수 있었음
