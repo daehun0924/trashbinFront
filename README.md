@@ -41,14 +41,30 @@ MySQL
 
 ## 프로젝트 동작 화면
 1. 회원 관리(S1-T01)
+<img src="images/member1.png" width="600" alt="회원관리 동작 1"/>
+<img src="images/member2.png" width="600" alt="회원관리 동작 2"/>
+<img src="images/member3.png" width="600" alt="회원관리 동작 3"/>
 
-2. 폐기물 관리(S1-T02)
+3. 폐기물 관리(S1-T02)
+<img src="images/trash1.png" width="600" alt="폐기물 관리 동작 1"/>
+<img src="images/trash2.png" width="600" alt="폐기물 관리 동작 2"/>
 
-3. 카테고리 관리(S1-T03)
+4. 카테고리 관리(S1-T03)
+<img src="images/category1.png" width="600" alt="카테고리 관리 동작 1"/>
+<img src="images/category2.png" width="600" alt="카테고리 관리 동작 2"/>
 
-4. 배출 관리(S1-T04)
+5. 배출 관리(S1-T04)
+<img src="images/throw1.png" width="600" alt="배출 관리 동작 1"/>
 
-5. 통계 관리(S1-T05)
+<img src="images/throw2.png" width="600" alt="배출 관리 동작 2"/>
+
+<img src="images/throw3.png" width="600" alt="배출 관리 동작 3"/>
+
+<img src="images/throw4.png" width="600" alt="배출 관리 동작 4"/>
+
+
+7. 통계 관리(S1-T05)
+<img src="images/statis1.png" width="600" alt="통계 관리 동작 1"/>
 
 
 ---
