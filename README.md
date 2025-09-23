@@ -60,11 +60,9 @@ MySQL
 
 <img src="images/trash (11).png" width="600" alt="배출 관리 동작 3"/>
 
-<img src="images/trash (12).png" width="600" alt="배출 관리 동작 4"/>
-
 
 7. 통계 관리(S1-T05)
-<img src="images/statis1.png" width="600" alt="통계 관리 동작 1"/>
+<img src="images/trash (12).png" width="600" alt="배출 관리 동작 4"/>
 
 
 ---
